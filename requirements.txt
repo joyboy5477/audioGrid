@@ -16,7 +16,7 @@ Jinja2==3.1.4
 llvmlite==0.43.0
 MarkupSafe==3.0.2
 more-itertools==10.5.0
-mpi4py @ file:///Users/ec2-user/ci_py311/mpi4py_1678417878874/work
+mpi4py==3.1.4
 mpmath==1.3.0
 networkx==3.4.2
 numba==0.60.0
