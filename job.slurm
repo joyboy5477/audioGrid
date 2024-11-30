@@ -10,10 +10,10 @@
 # Load necessary modules
 module load python/3.11.3                # Python 3 module
 module load ffmpeg                       # FFmpeg module
-module load openmpi                      # MPI module (if required)
+module load openmpi/4.1.4                # Specify the exact version of MPI module
 
 # Activate the virtual environment
 source venv/bin/activate                 # Activate virtual environment
 
 # Run the transcription job with MPI
-srun python mpi_transcription.py         # Use srun for running MPI jobs
+srun --mpi=pmix_v3 python mpi_transcription.py  # Use srun with explicit MPI version
