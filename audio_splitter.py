@@ -5,11 +5,6 @@ import ffmpeg
 # Splits the audio file into smaller chunks of a fixed duration (e.g., 5 minutes).
 # Outputs the temporary chunk files for processing.
 
-import os
-import tempfile
-import ffmpeg
-
-
 def split_audio_fixed_chunks(input_file: str, chunk_duration: int) -> list:
     """
     Split the input audio file into fixed-duration chunks.
