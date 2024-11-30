@@ -16,4 +16,4 @@ module load openmpi/4.1.4                # Specify the exact version of MPI modu
 source venv/bin/activate                 # Activate virtual environment
 
 # Run the transcription job with MPI
-srun --mpi=pmix python mpi_transcription.py
+srun --mpi=pmi2 python mpi_transcription.py
