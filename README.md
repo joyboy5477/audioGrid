@@ -91,49 +91,6 @@ The system produces:
 
 ---
 
-## **📦 Installation and Usage**
-
-### **Prerequisites**
-- **Python** (>= 3.8)  
-- **MPI** (e.g., OpenMPI or MPICH)  
-- **Python Libraries**:  
-  Install the dependencies using:  
-  ```bash
-  pip install -r requirements.txt
-  ```
-- **Whisper Model**:  
-  Install Whisper with GPU support:
-  ```bash
-  pip install whisper
-  ```
-
-### **Running the System**
-1. Split the audio into chunks:  
-   ```bash
-   mpiexec -n 4 python master_node.py --input audio_file.mp3 --output_dir ./chunks
-   ```
-2. Transcribe chunks:  
-   ```bash
-   mpiexec -n 4 python worker_node.py --chunk_dir ./chunks
-   ```
-3. Aggregate results:  
-   ```bash
-   python combine_transcriptions.py --chunk_dir ./chunks --output final_transcription.txt
-   ```
-
----
-
-## **📈 Future Enhancements**
-
-- **Dynamic Load Balancing**:
-  - Redistribute workloads dynamically based on node performance.
-- **Real-Time Transcription**:
-  - Enable live audio transcription for streaming applications.
-- **Improved Fault Tolerance**:
-  - Add checkpointing and task recovery for robust operations.
-
----
-
 ## **📝 Acknowledgments**
 
 - **MPI4Py** for enabling efficient parallelism.  
