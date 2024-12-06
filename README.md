@@ -1,4 +1,4 @@
-# audioGrid
+# Distributed Audio Transcription System
 
 **Problem Statement:**
 
