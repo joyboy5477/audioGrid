@@ -1,29 +1,152 @@
-# Distributed Audio Transcription System
+# Distributed Audio Transcription System 🎧✨
 
-**📜 Problem Statement:**
+**Team Members**  
+- **Akash Vishwakarma**  
+- **Samarth Khaire**  
+- **Gabriel Do**
 
-Design a highly efficient distributed audio transcription system to process large audio files by splitting them into smaller chunks, distributing workloads across cluster nodes using MPI, and optimizing processing within nodes through multithreading. The system will leverage GPU acceleration with Faster Whisper or OpenAI Whisper models, ensuring scalability, fault tolerance, and efficient result aggregation to minimize transcription time while maintaining high accuracy.
+---
+
+## **🌟 Problem Statement**
+
+Design a highly efficient **distributed audio transcription system** to process large audio files by splitting them into smaller chunks, distributing workloads across cluster nodes using **MPI**, and optimizing processing within nodes through **multithreading**. The system leverages **GPU acceleration** with Faster Whisper or OpenAI Whisper models, ensuring **scalability, fault tolerance**, and efficient result aggregation to minimize transcription time while maintaining **high accuracy**.
+
+---
+
+## **🚀 System Architecture**
+
+<div align="center">
+<img src="https://github.com/user-attachments/assets/fd28ac90-f038-4363-ad62-d3c42f3b8138" alt="System Architecture" width="70%">
+</div>
+
+The system processes a **1-hour audio file** by dividing it into **12 chunks** of 5 minutes each:
+
+1. **Master Node (Rank 0)**:
+   - Splits the audio file into smaller chunks.
+   - Distributes these chunks to worker nodes using **MPI**.
+   - Aggregates the processed transcriptions into the final output.
+
+2. **Worker Nodes (Ranks 1 to N)**:
+   - Use **ProcessPoolExecutor** for parallel processing across multiple CPU cores.
+   - Each node transcribes the assigned audio chunks.
+
+3. **Result Aggregation**:
+   - Transcriptions of all chunks are gathered back to the master node.
+   - The master node combines these results into a **final transcription output**.
+
+This hybrid approach leverages:
+- **MPI** for distributed task management.
+- **ProcessPoolExecutor** for intra-node parallelism.
+- **GPU Acceleration** for faster transcription (optional).
+
+---
+
+## **📊 System Output**
+
+### **⚡ Terminal Log**
+Below is an example of the system's performance for a **1-hour audio file**:
+
+<div align="center">
+<img src="https://github.com/user-attachments/assets/ada20df2-1085-4cc0-876a-16f56a94a189" alt="Terminal Log" width="90%">
+</div>
+
+### **📂 Generated Files**
+The system produces:
+1. **Intermediate Transcriptions**:
+   - `chunk_1_transcription.txt`, `chunk_2_transcription.txt`, ..., `chunk_12_transcription.txt`
+2. **Final Combined Transcription**:
+   - `final_transcription.txt`
+
+<div align="center">
+<img src="https://github.com/user-attachments/assets/ec37b146-7012-4bfc-a117-1204f59f81a0" alt="Generated Files" width="50%">
+</div>
+
+---
+
+## **⏱ Performance Metrics**
+
+| **Metric**            | **Value**      |
+|------------------------|----------------|
+| **Total Transcription Time** | ~5.65 minutes (339.48 seconds) |
+| **Chunk Splitting Time**      | 4.69 seconds                 |
+| **Chunk Transcription Time**  | 334.79 seconds               |
+| **Cores Utilized**            | 4 CPU cores                 |
+
+> **Note**: The results above are achieved without GPU acceleration. Adding GPUs or increasing the number of CPU cores can further optimize performance, showcasing the system's **scalability and efficiency**.
+
+---
+
+## **🌐 Key Features**
+
+- **Scalable Design**:
+  - Supports large-scale transcription tasks by distributing workloads across multiple nodes.
+- **Fault Tolerance**:
+  - Ensures seamless transcription even if some nodes fail.
+- **Hybrid Parallelism**:
+  - Combines MPI for distributed processing and ProcessPoolExecutor for intra-node multithreading.
+- **GPU Acceleration Ready**:
+  - Can leverage Faster Whisper or OpenAI Whisper models for faster processing.
+- **Result Aggregation**:
+  - Efficiently combines partial results into a unified transcription.
+
+---
+
+## **📦 Installation and Usage**
+
+### **Prerequisites**
+- **Python** (>= 3.8)  
+- **MPI** (e.g., OpenMPI or MPICH)  
+- **Python Libraries**:  
+  Install the dependencies using:  
+  ```bash
+  pip install -r requirements.txt
+  ```
+- **Whisper Model**:  
+  Install Whisper with GPU support:
+  ```bash
+  pip install whisper
+  ```
+
+### **Running the System**
+1. Split the audio into chunks:  
+   ```bash
+   mpiexec -n 4 python master_node.py --input audio_file.mp3 --output_dir ./chunks
+   ```
+2. Transcribe chunks:  
+   ```bash
+   mpiexec -n 4 python worker_node.py --chunk_dir ./chunks
+   ```
+3. Aggregate results:  
+   ```bash
+   python combine_transcriptions.py --chunk_dir ./chunks --output final_transcription.txt
+   ```
+
+---
+
+## **📈 Future Enhancements**
+
+- **Dynamic Load Balancing**:
+  - Redistribute workloads dynamically based on node performance.
+- **Real-Time Transcription**:
+  - Enable live audio transcription for streaming applications.
+- **Improved Fault Tolerance**:
+  - Add checkpointing and task recovery for robust operations.
+
+---
+
+## **📝 Acknowledgments**
+
+- **MPI4Py** for enabling efficient parallelism.  
+- **OpenAI Whisper** for providing state-of-the-art transcription models.  
+- **Our Team** for collaborative development and innovation.
+
+---
+
+This project demonstrates the power of distributed systems in solving real-world challenges efficiently. **Together, let's make audio transcription faster and more scalable than ever! 🚀**
+
+---
 
 
-**🚀 Diagram:**
-
-<img width="398" alt="audioGrid" src="https://github.com/user-attachments/assets/fd28ac90-f038-4363-ad62-d3c42f3b8138">
-
-The diagram shows the process of a 1-hour audio file by dividing it into 12 chunks of 5 minutes each, leveraging MPI for distributed processing and ProcessPoolExecutor for parallel processing on each node. The master node (Rank 0) splits the audio into chunks and scatters them across four worker nodes (Ranks 0 to 3), with each node receiving three chunks.
-On each node, multiple CPU cores process these chunks in parallel using Python’s ProcessPoolExecutor, ensuring efficient resource utilization. After processing, the transcriptions of all chunks (T1 to T12) are gathered back to the master node using MPI. The master node then combines these results into a final transcription output. This setup combines the power of MPI for distributed task management and ProcessPoolExecutor for intra-node parallelism, greatly reducing the processing time.
-
-
-**📊 Output:**
-
-<img width="576" alt="image" src="https://github.com/user-attachments/assets/ada20df2-1085-4cc0-876a-16f56a94a189">
-<img width="263" alt="image" src="https://github.com/user-attachments/assets/ec37b146-7012-4bfc-a117-1204f59f81a0">
-
-
-Above output demonstrates the results of our transcription system. The terminal log shows that a 1-hour audio file was split into 12 chunks, each processed independently. The total time for transcription was approximately 5.65 minutes (339.48 seconds), including just 4.69 seconds for splitting and 334.79 seconds for chunk transcription.
-
-The files section highlights the intermediate chunk-level transcriptions (chunk_1_transcription.txt, etc.) and the final combined result saved as final_transcription.txt. This setup currently runs on 4 CPU cores without GPU acceleration, achieving this performance efficiently.
-
-With GPU acceleration or more cores, this time could be further reduced, showcasing the potential scalability and optimization of the system.
 
 
 
